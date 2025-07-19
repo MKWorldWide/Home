@@ -1,0 +1,75 @@
+[0] request for gamedin.xyz/robots.txt:
+<<< GET /robots.txt HTTP/1.1
+<<< Connection: keep-alive
+<<< Host: gamedin.xyz
+<<< User-Agent: Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)
+<<< Accept: text/html,image/png,image/jpeg,image/pjpeg,image/x-xbitmap,image/svg+xml,image/gif;q=0.9,*/*;q=0.1
+<<< Accept-Language: en, *
+<<< Accept-Encoding: gzip, identity;q=0.9
+
+
+[0] response for gamedin.xyz/robots.txt:
+code=301
+>>> HTTP/1.1 301 Moved Permanently
+>>> location: https://gamedin.xyz/robots.txt
+>>> vary: Accept-Encoding
+>>> server: DPS/2.0.0+sha-d969522
+>>> x-version: d969522
+>>> x-siteid: us-east-1
+>>> set-cookie: dps_site_id=us-east-1; path=/
+>>> etag: f84dd2eadf71d19ac07834f908eaa482
+>>> date: Wed, 16 Jul 2025 01:50:35 GMT
+>>> keep-alive: timeout=5
+>>> transfer-encoding: chunked
+
+
+[1] request for gamedin.xyz/:
+<<< GET / HTTP/1.1
+<<< Cookie: $Version=1; dps_site_id=us-east-1; $Path=/
+<<< Connection: keep-alive
+<<< Host: gamedin.xyz
+<<< User-Agent: Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)
+<<< Accept: text/html,image/png,image/jpeg,image/pjpeg,image/x-xbitmap,image/svg+xml,image/gif;q=0.9,*/*;q=0.1
+<<< Accept-Language: en, *
+<<< Accept-Encoding: gzip, identity;q=0.9
+
+
+[1] response for gamedin.xyz/:
+code=301
+>>> HTTP/1.1 301 Moved Permanently
+>>> location: https://gamedin.xyz/
+>>> vary: Accept-Encoding
+>>> server: DPS/2.0.0+sha-d969522
+>>> x-version: d969522
+>>> x-siteid: us-east-1
+>>> set-cookie: dps_site_id=us-east-1; path=/
+>>> etag: e02636d74fd740563b70f447359e0924
+>>> date: Wed, 16 Jul 2025 01:50:35 GMT
+>>> keep-alive: timeout=5
+>>> transfer-encoding: chunked
+
+
+[0] request for gamedin.xyz/:
+<<< GET / HTTP/1.0
+<<< Cookie: $Version=1; dps_site_id=us-east-1; $Path=/
+<<< Connection: close
+<<< Host: gamedin.xyz
+<<< User-Agent: Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)
+<<< Accept: text/html,image/png,image/jpeg,image/pjpeg,image/x-xbitmap,image/svg+xml,image/gif;q=0.9,*/*;q=0.1
+<<< Accept-Language: en, *
+
+
+[0] response for gamedin.xyz/:
+code=301
+>>> HTTP/1.1 301 Moved Permanently
+>>> location: https://gamedin.xyz/
+>>> vary: Accept-Encoding
+>>> server: DPS/2.0.0+sha-d969522
+>>> x-version: d969522
+>>> x-siteid: us-east-1
+>>> set-cookie: dps_site_id=us-east-1; path=/
+>>> etag: e02636d74fd740563b70f447359e0924
+>>> date: Wed, 16 Jul 2025 01:50:35 GMT
+>>> connection: close
+
+

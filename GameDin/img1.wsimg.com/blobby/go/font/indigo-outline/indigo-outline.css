@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'Indigo Outline';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Indigo Outline'), url(indigo-outline.woff2) format('woff2'), url(https://img1.wsimg.com/blobby/go/font/indigo-outline/indigo-outline.woff) format('woff');
+}

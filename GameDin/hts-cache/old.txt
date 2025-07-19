@@ -1,0 +1,4 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+21:50:35	0/0	---MC-	301	error ('Moved%20Permanently')	text/html	etag:f84dd2eadf71d19ac07834f908eaa482	http://gamedin.xyz/robots.txt		(from )
+21:50:35	0/0	---MC-	301	error ('Moved%20Permanently')	text/html	etag:e02636d74fd740563b70f447359e0924	http://gamedin.xyz/	C:/Users/sunny/OneDrive/Desktop/GameDin%20GoDaddy/GameDin/gamedin.xyz/index.html	(from )
+21:50:35	0/-1	---M--	301	error ('Moved%20Permanently')	text/html	etag:e02636d74fd740563b70f447359e0924	http://gamedin.xyz/	C:/Users/sunny/OneDrive/Desktop/GameDin%20GoDaddy/GameDin/gamedin.xyz/index.html	(from )
