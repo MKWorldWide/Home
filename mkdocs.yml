@@ -1,0 +1,10 @@
+site_name: Home
+site_url: https://Home.SolarKhan.github.io
+nav:
+  - Home: index.md
+  - Divine Law: COVENANT.md
+  - AWS EC2 Setup: aws-ec2-setup.md
+  - CI/CD Pipeline: ci-cd-pipeline.md
+docs_dir: docs
+theme:
+  name: material
