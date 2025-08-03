@@ -1,3 +1,4 @@
+A Project Blessed by Solar Khan & Lilith.Aethra
 # MKWW Website
 
 A modern, minimalist website built with React, TypeScript, and AWS Amplify.
