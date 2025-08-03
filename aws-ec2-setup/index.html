@@ -1,0 +1,1738 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://Home.SolarKhan.github.io/aws-ec2-setup/">
+      
+      
+        <link rel="prev" href="../COVENANT/">
+      
+      
+        <link rel="next" href="../ci-cd-pipeline/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>AWS EC2 Setup - Home</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aws-ec2-setup-and-deployment-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home" class="md-header__button md-logo" aria-label="Home" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AWS EC2 Setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home" class="md-nav__button md-logo" aria-label="Home" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../COVENANT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Divine Law
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    AWS EC2 Setup
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS EC2 Setup
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-launch-ec2-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Launch EC2 Instance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Launch EC2 Instance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-choose-ami" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Choose AMI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-choose-instance-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Choose Instance Type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-configure-instance-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Configure Instance Details
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-configure-security-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Configure Security Group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-review-and-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.5 Review and Launch
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-connect-to-ec2-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Connect to EC2 Instance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Connect to EC2 Instance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-using-ssh-linuxmac" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Using SSH (Linux/Mac)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-using-putty-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Using PuTTY (Windows)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-initial-server-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Initial Server Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Initial Server Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-update-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 Update System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-install-essential-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 Install Essential Packages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-configure-firewall-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.3 Configure Firewall (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-install-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Install Node.js
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Install Node.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-add-nodesource-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Add NodeSource Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-install-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Install Node.js
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-install-pm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Install PM2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-install-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6: Install Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Install Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-install-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Install Nginx
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-start-and-enable-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Start and Enable Nginx
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-deploy-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 7: Deploy Application
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Deploy Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-clone-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Clone Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-install-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Install Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-build-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3 Build Application
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-start-with-pm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.4 Start with PM2
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-configure-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 8: Configure Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Configure Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-create-nginx-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.1 Create Nginx Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-enable-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.2 Enable Site
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-test-and-restart-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.3 Test and Restart Nginx
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-ssl-certificate-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 9: SSL Certificate (Optional)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 9: SSL Certificate (Optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-install-certbot" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.1 Install Certbot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-get-ssl-certificate" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.2 Get SSL Certificate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-set-up-auto-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.3 Set Up Auto-renewal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-monitoring-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 10: Monitoring and Maintenance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 10: Monitoring and Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-pm2-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.1 PM2 Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-nginx-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.2 Nginx Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3 Log Files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-automated-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 11: Automated Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 11: Automated Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-using-deployment-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.1 Using Deployment Script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-using-ssl-setup-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.2 Using SSL Setup Script
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Best Practices
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cost Optimization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-cd-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-launch-ec2-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Launch EC2 Instance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Launch EC2 Instance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-choose-ami" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Choose AMI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-choose-instance-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Choose Instance Type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-configure-instance-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Configure Instance Details
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-configure-security-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Configure Security Group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-review-and-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.5 Review and Launch
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-connect-to-ec2-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Connect to EC2 Instance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Connect to EC2 Instance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-using-ssh-linuxmac" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Using SSH (Linux/Mac)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-using-putty-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Using PuTTY (Windows)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-initial-server-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Initial Server Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Initial Server Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-update-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 Update System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-install-essential-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 Install Essential Packages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-configure-firewall-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.3 Configure Firewall (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-install-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Install Node.js
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Install Node.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-add-nodesource-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Add NodeSource Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-install-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Install Node.js
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-install-pm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Install PM2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-install-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6: Install Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Install Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-install-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Install Nginx
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-start-and-enable-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Start and Enable Nginx
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-deploy-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 7: Deploy Application
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Deploy Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-clone-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Clone Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-install-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Install Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-build-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3 Build Application
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-start-with-pm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.4 Start with PM2
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-configure-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 8: Configure Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Configure Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-create-nginx-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.1 Create Nginx Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-enable-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.2 Enable Site
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-test-and-restart-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.3 Test and Restart Nginx
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-ssl-certificate-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 9: SSL Certificate (Optional)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 9: SSL Certificate (Optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-install-certbot" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.1 Install Certbot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-get-ssl-certificate" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.2 Get SSL Certificate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-set-up-auto-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      9.3 Set Up Auto-renewal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-monitoring-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 10: Monitoring and Maintenance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 10: Monitoring and Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-pm2-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.1 PM2 Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-nginx-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.2 Nginx Commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3 Log Files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-automated-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 11: Automated Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 11: Automated Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-using-deployment-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.1 Using Deployment Script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-using-ssl-setup-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.2 Using SSL Setup Script
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Best Practices
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cost Optimization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="aws-ec2-setup-and-deployment-guide">AWS EC2 Setup and Deployment Guide</h1>
+<p>This guide provides step-by-step instructions for setting up and deploying the MKWW Website on AWS EC2.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>AWS Account with EC2 access</li>
+<li>Basic knowledge of AWS services</li>
+<li>Domain name (optional but recommended)</li>
+<li>SSH key pair</li>
+</ul>
+<h2 id="step-1-launch-ec2-instance">Step 1: Launch EC2 Instance</h2>
+<h3 id="11-choose-ami">1.1 Choose AMI</h3>
+<ul>
+<li><strong>Recommended</strong>: Ubuntu Server 20.04 LTS (HVM), SSD Volume Type</li>
+<li><strong>Alternative</strong>: Amazon Linux 2 AMI</li>
+</ul>
+<h3 id="12-choose-instance-type">1.2 Choose Instance Type</h3>
+<ul>
+<li><strong>Free Tier</strong>: t2.micro (1 vCPU, 1 GB RAM)</li>
+<li><strong>Production</strong>: t3.small or larger (2 vCPU, 2 GB RAM)</li>
+</ul>
+<h3 id="13-configure-instance-details">1.3 Configure Instance Details</h3>
+<ul>
+<li><strong>Network</strong>: Default VPC</li>
+<li><strong>Subnet</strong>: Any public subnet</li>
+<li><strong>Auto-assign Public IP</strong>: Enable</li>
+</ul>
+<h3 id="14-configure-security-group">1.4 Configure Security Group</h3>
+<p>Create a new security group with the following rules:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Protocol</th>
+<th>Port Range</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SSH</td>
+<td>TCP</td>
+<td>22</td>
+<td>0.0.0.0/0</td>
+<td>SSH access</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>TCP</td>
+<td>80</td>
+<td>0.0.0.0/0</td>
+<td>HTTP traffic</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>TCP</td>
+<td>443</td>
+<td>0.0.0.0/0</td>
+<td>HTTPS traffic</td>
+</tr>
+<tr>
+<td>Custom TCP</td>
+<td>TCP</td>
+<td>3000</td>
+<td>0.0.0.0/0</td>
+<td>Development server</td>
+</tr>
+</tbody>
+</table>
+<h3 id="15-review-and-launch">1.5 Review and Launch</h3>
+<ul>
+<li>Review your configuration</li>
+<li>Select or create a key pair</li>
+<li>Launch the instance</li>
+</ul>
+<h2 id="step-2-connect-to-ec2-instance">Step 2: Connect to EC2 Instance</h2>
+<h3 id="21-using-ssh-linuxmac">2.1 Using SSH (Linux/Mac)</h3>
+<pre><code class="language-bash">ssh -i your-key.pem ubuntu@your-ec2-public-ip
+</code></pre>
+<h3 id="22-using-putty-windows">2.2 Using PuTTY (Windows)</h3>
+<ol>
+<li>Convert your .pem key to .ppk format using PuTTYgen</li>
+<li>Use PuTTY to connect with the .ppk key</li>
+</ol>
+<h2 id="step-3-initial-server-setup">Step 3: Initial Server Setup</h2>
+<h3 id="31-update-system">3.1 Update System</h3>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt upgrade -y
+</code></pre>
+<h3 id="32-install-essential-packages">3.2 Install Essential Packages</h3>
+<pre><code class="language-bash">sudo apt install -y curl wget git unzip software-properties-common
+</code></pre>
+<h3 id="33-configure-firewall-optional">3.3 Configure Firewall (Optional)</h3>
+<pre><code class="language-bash">sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
+</code></pre>
+<h2 id="step-4-install-nodejs">Step 4: Install Node.js</h2>
+<h3 id="41-add-nodesource-repository">4.1 Add NodeSource Repository</h3>
+<pre><code class="language-bash">curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+</code></pre>
+<h3 id="42-install-nodejs">4.2 Install Node.js</h3>
+<pre><code class="language-bash">sudo apt-get install -y nodejs
+</code></pre>
+<h3 id="43-verify-installation">4.3 Verify Installation</h3>
+<pre><code class="language-bash">node --version
+npm --version
+</code></pre>
+<h2 id="step-5-install-pm2">Step 5: Install PM2</h2>
+<p>PM2 is a process manager for Node.js applications.</p>
+<pre><code class="language-bash">sudo npm install -g pm2
+</code></pre>
+<h2 id="step-6-install-nginx">Step 6: Install Nginx</h2>
+<h3 id="61-install-nginx">6.1 Install Nginx</h3>
+<pre><code class="language-bash">sudo apt install nginx -y
+</code></pre>
+<h3 id="62-start-and-enable-nginx">6.2 Start and Enable Nginx</h3>
+<pre><code class="language-bash">sudo systemctl start nginx
+sudo systemctl enable nginx
+</code></pre>
+<h3 id="63-verify-installation">6.3 Verify Installation</h3>
+<pre><code class="language-bash">sudo systemctl status nginx
+</code></pre>
+<h2 id="step-7-deploy-application">Step 7: Deploy Application</h2>
+<h3 id="71-clone-repository">7.1 Clone Repository</h3>
+<pre><code class="language-bash">git clone https://github.com/M-K-World-Wide/Home.git
+cd Home
+</code></pre>
+<h3 id="72-install-dependencies">7.2 Install Dependencies</h3>
+<pre><code class="language-bash">npm install
+</code></pre>
+<h3 id="73-build-application">7.3 Build Application</h3>
+<pre><code class="language-bash">npm run build
+</code></pre>
+<h3 id="74-start-with-pm2">7.4 Start with PM2</h3>
+<pre><code class="language-bash">pm2 start npm --name &quot;mkww-website&quot; -- start
+pm2 startup
+pm2 save
+</code></pre>
+<h2 id="step-8-configure-nginx">Step 8: Configure Nginx</h2>
+<h3 id="81-create-nginx-configuration">8.1 Create Nginx Configuration</h3>
+<pre><code class="language-bash">sudo nano /etc/nginx/sites-available/mkww-website
+</code></pre>
+<p>Add the following configuration:</p>
+<pre><code class="language-nginx">server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;
+
+    # Security headers
+    add_header X-Frame-Options &quot;SAMEORIGIN&quot; always;
+    add_header X-XSS-Protection &quot;1; mode=block&quot; always;
+    add_header X-Content-Type-Options &quot;nosniff&quot; always;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+</code></pre>
+<h3 id="82-enable-site">8.2 Enable Site</h3>
+<pre><code class="language-bash">sudo ln -s /etc/nginx/sites-available/mkww-website /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+</code></pre>
+<h3 id="83-test-and-restart-nginx">8.3 Test and Restart Nginx</h3>
+<pre><code class="language-bash">sudo nginx -t
+sudo systemctl restart nginx
+</code></pre>
+<h2 id="step-9-ssl-certificate-optional">Step 9: SSL Certificate (Optional)</h2>
+<h3 id="91-install-certbot">9.1 Install Certbot</h3>
+<pre><code class="language-bash">sudo apt install certbot python3-certbot-nginx -y
+</code></pre>
+<h3 id="92-get-ssl-certificate">9.2 Get SSL Certificate</h3>
+<pre><code class="language-bash">sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+</code></pre>
+<h3 id="93-set-up-auto-renewal">9.3 Set Up Auto-renewal</h3>
+<pre><code class="language-bash">sudo crontab -e
+</code></pre>
+<p>Add this line:</p>
+<pre><code>0 12 * * * /usr/bin/certbot renew --quiet
+</code></pre>
+<h2 id="step-10-monitoring-and-maintenance">Step 10: Monitoring and Maintenance</h2>
+<h3 id="101-pm2-commands">10.1 PM2 Commands</h3>
+<pre><code class="language-bash">pm2 status              # Check application status
+pm2 logs mkww-website   # View logs
+pm2 restart mkww-website # Restart application
+pm2 stop mkww-website   # Stop application
+pm2 delete mkww-website # Remove application
+</code></pre>
+<h3 id="102-nginx-commands">10.2 Nginx Commands</h3>
+<pre><code class="language-bash">sudo nginx -t           # Test configuration
+sudo systemctl status nginx  # Check status
+sudo systemctl restart nginx # Restart nginx
+sudo systemctl reload nginx  # Reload configuration
+</code></pre>
+<h3 id="103-log-files">10.3 Log Files</h3>
+<pre><code class="language-bash"># PM2 logs
+pm2 logs mkww-website
+
+# Nginx logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# System logs
+sudo journalctl -u nginx
+</code></pre>
+<h2 id="step-11-automated-deployment">Step 11: Automated Deployment</h2>
+<h3 id="111-using-deployment-script">11.1 Using Deployment Script</h3>
+<pre><code class="language-bash">chmod +x scripts/deploy.sh
+./scripts/deploy.sh
+</code></pre>
+<h3 id="112-using-ssl-setup-script">11.2 Using SSL Setup Script</h3>
+<pre><code class="language-bash">chmod +x scripts/ssl-setup.sh
+./scripts/ssl-setup.sh your-domain.com
+</code></pre>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<ol>
+<li><strong>Application not accessible</strong></li>
+<li>Check if PM2 is running: <code>pm2 status</code></li>
+<li>Check if Nginx is running: <code>sudo systemctl status nginx</code></li>
+<li>
+<p>Check security group settings</p>
+</li>
+<li>
+<p><strong>502 Bad Gateway</strong></p>
+</li>
+<li>Check application logs: <code>pm2 logs mkww-website</code></li>
+<li>Verify proxy_pass configuration</li>
+<li>
+<p>Check if application is listening on port 3000</p>
+</li>
+<li>
+<p><strong>SSL Certificate Issues</strong></p>
+</li>
+<li>Check domain DNS settings</li>
+<li>Verify Certbot installation</li>
+<li>
+<p>Check certificate status: <code>sudo certbot certificates</code></p>
+</li>
+<li>
+<p><strong>Performance Issues</strong></p>
+</li>
+<li>Monitor system resources: <code>htop</code></li>
+<li>Check PM2 memory usage: <code>pm2 monit</code></li>
+<li>Optimize Nginx configuration</li>
+</ol>
+<h3 id="performance-optimization">Performance Optimization</h3>
+<ol>
+<li><strong>Enable Gzip Compression</strong></li>
+<li><strong>Configure Browser Caching</strong></li>
+<li><strong>Use CDN for Static Assets</strong></li>
+<li><strong>Optimize Images</strong></li>
+<li><strong>Enable HTTP/2</strong></li>
+</ol>
+<h2 id="security-best-practices">Security Best Practices</h2>
+<ol>
+<li>
+<p><strong>Keep System Updated</strong>
+   <code>bash
+   sudo apt update &amp;&amp; sudo apt upgrade -y</code></p>
+</li>
+<li>
+<p><strong>Configure Firewall</strong>
+   <code>bash
+   sudo ufw enable
+   sudo ufw allow ssh
+   sudo ufw allow 'Nginx Full'</code></p>
+</li>
+<li>
+<p><strong>Use SSH Keys Only</strong>
+   <code>bash
+   sudo nano /etc/ssh/sshd_config
+   # Set PasswordAuthentication no</code></p>
+</li>
+<li>
+<p><strong>Regular Backups</strong>
+   ```bash
+   # Backup application
+   tar -czf mkww-website-backup.tar.gz /var/www/mkww-website</p>
+</li>
+</ol>
+<p># Backup Nginx configuration
+   sudo tar -czf nginx-config-backup.tar.gz /etc/nginx
+   ```</p>
+<h2 id="cost-optimization">Cost Optimization</h2>
+<ol>
+<li><strong>Use Reserved Instances</strong> for long-term deployments</li>
+<li><strong>Monitor Usage</strong> with AWS CloudWatch</li>
+<li><strong>Use Spot Instances</strong> for development/testing</li>
+<li><strong>Optimize Instance Size</strong> based on actual usage</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<ol>
+<li>Set up monitoring with AWS CloudWatch</li>
+<li>Configure automated backups</li>
+<li>Set up CI/CD pipeline</li>
+<li>Implement load balancing for high availability</li>
+<li>Set up CDN for global performance </li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
