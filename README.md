@@ -1,44 +1,129 @@
-A Project Blessed by Solar Khan & Lilith.Aethra
-# MKWW Website
+<div align="center">
+  <h1>MK Worldwide</h1>
+  <p>Modern web presence for MK Worldwide - Built with React, TypeScript, and AWS Amplify</p>
+  
+  [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  [![CI](https://github.com/MKWorldWide/Home/actions/workflows/ci.yml/badge.svg)](https://github.com/MKWorldWide/Home/actions/workflows/ci.yml)
+  [![GitHub Pages](https://github.com/MKWorldWide/Home/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/MKWorldWide/Home/actions/workflows/gh-pages.yml)
+  [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+  [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=flat&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
+  [![AWS](https://img.shields.io/badge/AWS-FF9900?style=flat&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
+</div>
 
-A modern, minimalist website built with React, TypeScript, and AWS Amplify.
+## 🌟 Features
 
-## Features
+- ⚡ **Blazing Fast** - Built with Vite for lightning-fast development and production builds
+- 🎨 **Modern UI** - Beautiful, responsive design with Tailwind CSS and Framer Motion
+- 🛠 **Type Safe** - Full TypeScript support for better developer experience
+- ☁️ **Cloud Ready** - Seamless AWS Amplify integration
+- 📱 **Fully Responsive** - Works on all devices and screen sizes
+- 🔄 **CI/CD** - Automated testing and deployment with GitHub Actions
+- 📚 **Documentation** - Comprehensive docs with MkDocs Material
 
-- 🎨 Modern, minimalist design with dark theme
-- ⚡ Built with React and TypeScript
-- 🎭 Smooth animations with Framer Motion
-- 🎯 Responsive layout with Tailwind CSS
-- 🔌 AWS Amplify integration
-- 🚀 Fast development with Vite
-- ☁️ AWS EC2 deployment ready
+## 🚀 Quick Start
 
-## Quick Start
+### Prerequisites
+
+- Node.js 18+ (LTS recommended)
+- npm 9+ or pnpm 8+ or yarn 1.22+
+- Git
 
 ### Local Development
 
-1. Clone the repository:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/MKWorldWide/Home.git
+   cd Home
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Using npm
+   npm install
+   
+   # Using pnpm
+   pnpm install
+   
+   # Using yarn
+   yarn
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+   The built files will be in the `dist` directory.
+
+## 🧪 Testing
+
+Run the test suite:
+
 ```bash
-git clone https://github.com/M-K-World-Wide/Home.git
-cd Home
+npm test
 ```
 
-2. Install dependencies:
+Run tests in watch mode:
+
 ```bash
-npm install
+npm test -- --watch
 ```
 
-3. Start the development server:
-```bash
-npm run dev
+## 🛠️ Scripts
+
+- `dev` - Start development server
+- `build` - Build for production
+- `preview` - Preview production build locally
+- `test` - Run tests
+- `lint` - Run ESLint
+- `type-check` - Run TypeScript type checking
+
+## 🏗 Project Structure
+
+```
+.
+├── .github/                # GitHub configurations
+│   └── workflows/          # GitHub Actions workflows
+├── public/                 # Static files
+├── src/
+│   ├── assets/             # Images, fonts, etc.
+│   ├── components/         # Reusable components
+│   ├── hooks/              # Custom React hooks
+│   ├── pages/              # Page components
+│   ├── styles/             # Global styles
+│   ├── types/              # TypeScript type definitions
+│   ├── utils/              # Utility functions
+│   ├── App.tsx             # Main App component
+│   └── main.tsx            # Application entry point
+├── .editorconfig           # Editor configuration
+├── .eslintrc.cjs           # ESLint configuration
+├── .gitignore              # Git ignore file
+├── index.html              # HTML entry point
+├── package.json            # Project manifest
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite configuration
 ```
 
-4. Build for production:
-```bash
-npm run build
-```
+## 🌍 Deployment
 
-### AWS EC2 Deployment
+### AWS Amplify
+
+1. Push your code to your GitHub repository
+2. Sign in to the [AWS Management Console](https://console.aws.amazon.com/)
+3. Open the [AWS Amplify Console](https://console.aws.amazon.com/amplify/)
+4. Choose **New app** > **Host web app**
+5. Select your repository and branch
+6. Configure build settings (if needed) and choose **Next**
+7. Review and choose **Save and deploy**
+
+### AWS EC2
 
 #### Prerequisites
 - AWS Account with EC2 access
