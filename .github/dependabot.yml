@@ -1,0 +1,95 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    # Look for `package.json` and `package-lock.json` in the `root` directory
+    directory: "/"
+    # Check for updates once a week
+    schedule:
+      interval: "weekly"
+    # Assign reviewers for npm updates
+    reviewers:
+      - "MKWorldWide/security"
+    # Add labels to all npm pull requests
+    labels:
+      - "dependencies"
+      - "javascript"
+    # Group updates for major and minor version updates
+    versioning-strategy: "increase"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    # Look for GitHub Actions in `.github/workflows`
+    directory: "/.github/workflows"
+    # Check for updates once a month
+    schedule:
+      interval: "monthly"
+    # Assign reviewers for GitHub Actions updates
+    reviewers:
+      - "MKWorldWide/devops"
+    # Add labels to all GitHub Actions pull requests
+    labels:
+      - "github-actions"
+      - "dependencies"
+
+  # Enable version updates for Python (for MkDocs)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    reviewers:
+      - "MKWorldWide/security"
+    labels:
+      - "dependencies"
+      - "python"
+    versioning-strategy: "increase"
+
+# Configuration for security updates
+update-configs:
+  # Automatically rebase PRs to resolve conflicts
+  rebase-strategy: "auto"
+  # Limit the number of open PRs to 5
+  open-pull-requests-limit: 5
+  # Only allow updates to versions that don't require major version changes
+  versioning-strategy: "increase-if-necessary"
+  # Apply security labels to PRs that address security vulnerabilities
+  security-updates: true
+
+# Ignore specific dependencies
+ignore:
+  - dependency-name: "*"
+    # Don't create PRs for pre-release versions
+    versions: ["*alpha*", "*beta*", "*rc*", "*pre*", "*dev*"]
+    # Don't update to major version 0.x
+    update-types: ["version-update:semver-major"]
+
+# Commit message customization
+commit-message:
+  prefix: "chore(deps)"
+  include: "scope"
+  prefix-development: "chore(dev-deps)"
+
+# Security updates will be raised as PRs with high priority
+vulnerability-alerts:
+  enabled: true
+  labels:
+    - "security"
+    - "dependencies"
+  assignees:
+    - "MKWorldWide/security"
+  reviewers:
+    - "MKWorldWide/security"
+  milestone: 1
+  # Notify security team via issue creation
+  notify:
+    teams:
+      - "MKWorldWide/security"
+    # Create a security advisory for high/critical vulnerabilities
+    security-advisories:
+      enabled: true
+      severity-threshold: "high"

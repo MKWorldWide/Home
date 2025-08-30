@@ -1,49 +1,133 @@
-name: Deploy to GitHub Pages
+name: Deploy Documentation
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/gh-pages.yml'
+      - 'mkdocs.yml'
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deployment'
+        required: false
+        default: 'Manual deployment'
+
+# Environment variables
+env:
+  PYTHON_VERSION: '3.11'
+  MKDOCS_VERSION: 'latest'
+  MKDOCS_MATERIAL_VERSION: '9.x'
+
+# Permissions for GitHub Pages
+defaults:
+  run:
+    shell: bash
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Concurrency to prevent multiple deployments for the same ref
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
+          cache-dependency-path: '**/requirements*.txt'
 
       - name: Install MkDocs and plugins
         run: |
-          python -m pip install --upgrade pip
-          pip install mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin
+          python -m pip install --upgrade pip setuptools wheel
+          pip install "mkdocs==$MKDOCS_VERSION"
+          pip install "mkdocs-material==$MKDOCS_MATERIAL_VERSION"
+          pip install mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin
+        env:
+          MKDOCS_VERSION: ${{ env.MKDOCS_VERSION }}
+          MKDOCS_MATERIAL_VERSION: ${{ env.MKDOCS_MATERIAL_VERSION }}
 
       - name: Build site
-        run: mkdocs build --strict --verbose
+        run: |
+          mkdocs build --strict --verbose --clean --site-dir ./site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './site'
+          retention-days: 7
 
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
     needs: build-and-deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    name: Notify Deployment
+    needs: deploy
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployment status
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${{ github.repository }}:${{ github.head_ref || github.ref_name }}`,
+            });
+
+            const deploymentStatus = '${{ needs.deploy.result }}';
+            const deploymentUrl = '${{ needs.deploy.outputs.page_url }}';
+            const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
+            
+            if (pullRequests.length > 0) {
+              const pr = pullRequests[0];
+              let message = '';
+              
+              if (deploymentStatus === 'success') {
+                message = `✅ Documentation deployed successfully!\n\n` +
+                          `📚 [View Documentation](${deploymentUrl}) | ` +
+                          `🔍 [View Workflow Run](${runUrl})`;
+              } else {
+                message = `❌ Documentation deployment failed!\n\n` +
+                          `🔍 [View Workflow Run](${runUrl}) for details.`;
+              }
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: message
+              });
+            }

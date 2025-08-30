@@ -1,0 +1,89 @@
+# Gitleaks configuration for detecting secrets and sensitive information
+# Based on Gitleaks v8 configuration
+
+# General configuration
+[extend]
+useDefault = true
+
+# Rule configurations
+[[rules]]
+description = "AWS Access Key"
+id = "aws-access-key"
+regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
+tags = ["key", "AWS"]
+
+[[rules]]
+description = "AWS Secret Key"
+id = "aws-secret-key"
+regex = '''(?i)aws(.{0,20})?(?-i)['\"][0-9a-zA-Z\/+]{40}['\"]'''
+tags = ["key", "AWS"]
+
+[[rules]]
+description = "GitHub Personal Access Token"
+id = "github-token"
+regex = '''(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,255}'''
+tags = ["key", "GitHub"]
+
+[[rules]]
+description = "SSH private key"
+id = "ssh-private-key"
+regex = '''-----BEGIN (DSA|RSA|EC|OPENSSH) PRIVATE KEY-----'''
+tags = ["key", "SSH"]
+
+[[rules]]
+description = "Google API key"
+id = "google-api-key"
+regex = '''AIza[0-9A-Za-z\\-_]{35}'''
+tags = ["key", "Google"]
+
+[[rules]]
+description = "Slack Token"
+id = "slack-token"
+regex = '''xox[baprs]-(\w{8,48})'''
+tags = ["key", "Slack"]
+
+# Allowlist specific files or paths
+[[allowlist]]
+paths = [
+  "**/test/**",
+  "**/tests/**",
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/build/**",
+  "**/.github/**"
+]
+
+# Global allowlist for false positives
+[[allowlist]]
+regexes = [
+  ".*example.*",
+  ".*test.*",
+  ".*mock.*",
+  ".*sample.*"
+]
+
+# Ignore specific commits
+[allowlist.commits]
+commits = [
+  "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0"
+]
+
+# Rule to detect high entropy strings (potential secrets)
+[[rules]]
+description = "High Entropy String"
+id = "high-entropy-string"
+regex = '''[a-z0-9]{32,}'''
+entropy = 4.5
+tags = ["entropy"]
+
+# Ignore specific patterns
+[[rules]]
+description = "Ignore common false positives"
+id = "ignore-false-positives"
+regex = '''(?i)(example|test|mock|sample|dummy|placeholder)'''
+paths = [
+  "**/*.md",
+  "**/*.txt",
+  "**/test/**",
+  "**/tests/**"
+]

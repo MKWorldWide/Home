@@ -1,0 +1,131 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Push events matching v1.0, v20.15.10, etc.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+
+env:
+  NODE_VERSION: '20.x'
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Get version
+        id: get-version
+        run: |
+          if [[ ${{ github.event_name == 'workflow_dispatch' }} ]]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Bump version
+        run: |
+          npm version ${{ steps.get-version.outputs.version }} --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore(release): v${{ steps.get-version.outputs.version }}"
+          git push origin HEAD:main
+
+      - name: Build package
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Publish to npm
+        if: success()
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" > .npmrc
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v2
+        with:
+          tag_name: v${{ steps.get-version.outputs.version }}
+          release_name: Release v${{ steps.get-version.outputs.version }}
+          body: |
+            ## What's Changed
+            
+            ### Features
+            - Add new features here
+            
+            ### Bug Fixes
+            - Fix bugs here
+            
+            ### Dependencies
+            - Update dependencies
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v0.0.0...v${{ steps.get-version.outputs.version }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v4
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./dist/your-package-${{ steps.get-version.outputs.version }}.tgz
+          asset_name: your-package-${{ steps.get-version.outputs.version }}.tgz
+          asset_content_type: application/gzip
+
+  notify:
+    name: Notify
+    needs: release
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: '#36a64f'
+          SLACK_TITLE: '🚀 New Release: v${{ needs.release.outputs.version }}'
+          SLACK_MESSAGE: 'A new version has been released: ${{ github.repository }}@v${{ needs.release.outputs.version }}'
+          SLACK_FOOTER: 'Released by ${{ github.actor }}'
+
+      - name: Send failure notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: '#ff0000'
+          SLACK_TITLE: '❌ Release Failed: ${{ github.repository }}'
+          SLACK_MESSAGE: 'Failed to release v${{ needs.release.outputs.version }}. Check the workflow run for details.'
+          SLACK_FOOTER: 'Failed in run ${{ github.run_id }}'

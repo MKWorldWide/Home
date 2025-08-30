@@ -1,54 +1,179 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.mdx'
+      - '**/*.txt'
+      - '**/*.json'
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual workflow run'
 
+# Environment variables available to all jobs and steps
+env:
+  NODE_VERSION: '20.x'
+  PNPM_VERSION: '8.x'
+  NODE_ENV: test
+  CI: true
+
+# Global job defaults
+defaults:
+  run:
+    shell: bash
+
+# Concurrency to prevent multiple workflow runs for the same ref
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  lint-and-test:
-    name: Lint and Test
+  # Linting and type checking
+  lint:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Node.js
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+          cache-dependency-path: '**/package-lock.json'
+
       - name: Install dependencies
-        run: npm ci
-        
-      - name: Run linter
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Run ESLint
         run: npm run lint
-        
-      - name: Run tests
-        run: npm test
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+  # Unit and integration tests
+  test:
+    name: Test
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+        os: [ubuntu-latest]
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Run tests with coverage
+        run: |
+          npm test -- --coverage
+          npx codecov
         env:
           CI: true
-          
-      - name: Run type check
-        run: npx tsc --noEmit
-        
+          NODE_OPTIONS: '--max_old_space_size=4096'
+
+  # Build and verify production build
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
       - name: Build application
         run: npm run build
-        
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: '--max_old_space_size=4096'
+
       - name: Upload build artifacts
-        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: production-build
           path: |
             dist/
             .next/
             .vercel/
-          retention-days: 5
+          retention-days: 7
+
+  # Security scanning
+  security:
+    name: Security Scan
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run npm audit
+        run: npm audit --production
+        if: success()
+
+      - name: Run dependency check
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  # Notify status
+  notify:
+    name: Notify
+    if: always()
+    needs: [lint, test, build, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify workflow status
+        if: ${{ failure() }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${{ github.repository }}:${{ github.head_ref || github.ref_name }}`,
+            });
+            
+            if (pullRequests.length > 0) {
+              const pr = pullRequests[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `❌ Workflow run failed! Check the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`
+              });
+            }
